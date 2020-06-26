@@ -1,0 +1,56 @@
+﻿@model IEnumerable<EMarket.Areas.Admin.Models.ChiTietHoaDon>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+
+<div>
+    <h4>CHI TIẾT HÓA ĐƠN</h4>
+    <hr />   
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.HoaDon.HoaDonId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HangHoa.TenHangHoa)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SoLuong)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TongTien)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HoaDonId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HangHoa.TenHangHoa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SoLuong)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TongTien)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!--div>
+        <a asp-action="Edit" asp-route-id="@@{Model.FirstOrDefault().ChiTietHoaDonId}">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div-->
+    <a asp-action="Index">Trở Về</a>
+</div>

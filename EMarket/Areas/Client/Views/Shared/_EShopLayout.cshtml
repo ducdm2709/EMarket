@@ -1,0 +1,370 @@
+﻿@using Microsoft.AspNetCore.Http;
+@using EMarket.Areas.Client.Services;
+@using EMarket.Areas.Client.Helpers;
+@using Newtonsoft.Json;
+
+@inject HelperService helperService
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="~/css/bootstrap.min.css" />
+
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="~/css/slick.css" />
+    <link type="text/css" rel="stylesheet" href="~/css/slick-theme.css" />
+
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="~/css/nouislider.min.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/fbLiveChat.js"></script>
+
+
+    <link href="~/css/fbLiveChat.css" rel="stylesheet" />
+    
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="~/css/font-awesome.min.css">
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="~/css/style.css" />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    @{
+        string segements = $"{this.ViewContext.RouteData.Values["controller"]}/{this.ViewContext.RouteData.Values["action"]}";
+        @(Html.Raw(helperService.InjectMetaInfo(segements)));
+        segements = null;
+    }
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146394729-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-146394729-1');
+    </script>
+</head>
+<body>
+    <!-- Load Facebook SDK for JavaScript -->
+    <div id="fb-root"></div>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                xfbml: true,
+                version: 'v4.0'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+    <!-- Your customer chat code -->
+    <div class="fb-customerchat"
+         attribution=setup_tool
+         page_id="115306342469879"
+         logged_in_greeting="Xin Chào! Bạn cần chúng tôi giúp gì?"
+         logged_out_greeting="Xin Chào! Bạn cần chúng tôi giúp gì?">
+    </div>
+
+
+    <!-- HEADER -->
+    <header>
+        <!-- TOP HEADER -->
+        <div id="top-header">
+            <div class="container">
+                <ul class="header-links pull-left">
+                    <li><a href="#"><i class="fa fa-phone"></i> 0903-373-103</a></li>
+                    <li><a href="#"><i class="fa fa-envelope-o"></i> EShopping@gmail.com</a></li>
+                    <li><a href="#"><i class="fa fa-map-marker"></i> HCMUP-HCM CiTy</a></li>
+                </ul>
+                <ul class="header-links pull-right">
+                    @if (Context.Session.GetString("User") == null || Context.Session.GetString("User") == "")
+                    {
+                        <li><a asp-controller="Login" asp-action="Index"><i class="fa fa-user-o"></i>Login</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-controller="Login" asp-action="Logout"><i class="fa fa-sign-in"></i>@JsonConvert.DeserializeObject(Context.Session.GetString("User"))-(SignOut)</a></li>
+                        <li><a asp-controller="Login" asp-action="ChangeInfo"><i class="fa fa-user-o"></i>[ChangeInfo]</a></li>
+
+                    }
+
+                </ul>
+            </div>
+        </div>
+        <!-- /TOP HEADER -->
+        <!-- MAIN HEADER -->
+        <div id="header">
+            <!-- container -->
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <!-- LOGO -->
+                    <div class="col-md-3">
+                        <div class="header-logo">
+                            <a class="logo mt-5" asp-controller="GioHang" asp-action="Index">
+                                <span>Trang Chủ</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- /LOGO -->
+                    <!-- SEARCH BAR -->
+                    @await Component.InvokeAsync("SearchBar")
+                    <!-- /SEARCH BAR -->
+                    <!-- ACCOUNT -->
+                    <div class="col-md-3 clearfix">
+                        <div class="header-ctn">
+                            <!-- Wishlist -->
+                            <!-- /Wishlist -->
+                            <!-- Cart -->
+                            @await Component.InvokeAsync("GioHang")
+                            <!-- /Cart -->
+                            <!-- Menu Toogle -->
+                            <div class="menu-toggle">
+                                <a href="#">
+                                    <i class="fa fa-bars"></i>
+                                    <span>Menu</span>
+                                </a>
+                            </div>
+                            <!-- /Menu Toogle -->
+                        </div>
+                    </div>
+                    <!-- /ACCOUNT -->
+                </div>
+                <!-- row -->
+            </div>
+            <!-- container -->
+        </div>
+        <!-- /MAIN HEADER -->
+    </header>
+
+    <!-- /HEADER -->
+    <!-- SECTION -->
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <div id="aside" class="col-md-3">
+                    <!-- ASIDE -->
+                    @await Component.InvokeAsync("TheLoaiHangHoa")
+                    <!-- /aside Widget -->
+                    <!-- aside Widget -->
+                    <!--div class="aside">
+                        <h3 class="aside-title">Giá Thành</h3>
+                        <div class="price-filter">
+                            <div id="price-slider"></div>
+                            <div class="input-number price-min">
+                                <input id="price-min" type="number">
+                                <span class="qty-up">+</span>
+                                <span class="qty-down">-</span>
+                            </div>
+                            <span>-</span>
+                            <div class="input-number price-max">
+                                <input id="price-max" type="number">
+                                <span class="qty-up">+</span>
+                                <span class="qty-down">-</span>
+                            </div>
+                        </div>
+                    </div-->
+                    <!-- /aside Widget -->
+                    <!-- aside Widget -->
+                    @await Component.InvokeAsync("DanhSachNCC")
+                    <!-- /aside Widget -->
+                    <!-- aside Widget -->
+                    @await Component.InvokeAsync("TopSelling")
+                    <!-- /aside Widget -->
+                </div>
+                <!-- /ASIDE -->
+
+                @RenderBody()
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+
+    <!-- /SECTION -->
+    <!-- FOOTER -->
+    @await Component.InvokeAsync("NewArrivals")
+
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <div class="row">
+                <!-- Begin Mailchimp Signup Form -->
+                <link href="//cdn-images.mailchimp.com/embedcode/classic-10_7.css" rel="stylesheet" type="text/css">
+                <style type="text/css">
+                    #mc_embed_signup {
+                        background: #fff;
+                        clear: left;
+                        font: 14px Helvetica,Arial,sans-serif;
+                    }
+                    /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+                        We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+                </style>
+                <div id="mc_embed_signup">
+                    <form action="https://gmail.us3.list-manage.com/subscribe/post?u=fc026acc969c663bdf4d1e8ea&amp;id=6d64d36bce" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                        <div id="mc_embed_signup_scroll">
+                            <h1 class="text-center">Đăng ký nhận mail</h1>
+                            <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+                            <div class="mc-field-group">
+                                <label for="mce-EMAIL">
+                                    Email  <span class="asterisk">*</span>
+                                </label>
+                                <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+                            </div>
+                            <div class="mc-field-group">
+                                <label for="mce-FNAME">Tên </label>
+                                <input type="text" value="" name="FNAME" class="" id="mce-FNAME">
+                            </div>
+                            <div class="mc-field-group">
+                                <label for="mce-LNAME">Họ </label>
+                                <input type="text" value="" name="LNAME" class="" id="mce-LNAME">
+                            </div>
+                            <div class="mc-field-group size1of2">
+                                <label for="mce-BIRTHDAY-month">Ngày sinh </label>
+                                <div class="datefield">
+                                    <span class="subfield monthfield"><input class="birthday " type="text" pattern="[0-9]*" value="" placeholder="MM" size="2" maxlength="2" name="BIRTHDAY[month]" id="mce-BIRTHDAY-month"></span> /
+                                    <span class="subfield dayfield"><input class="birthday " type="text" pattern="[0-9]*" value="" placeholder="DD" size="2" maxlength="2" name="BIRTHDAY[day]" id="mce-BIRTHDAY-day"></span>
+                                    <span class="small-meta nowrap">( mm / dd )</span>
+                                </div>
+                            </div>	<div id="mce-responses" class="clear">
+                                <div class="response" id="mce-error-response" style="display:none"></div>
+                                <div class="response" id="mce-success-response" style="display:none"></div>
+                            </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                            <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_fc026acc969c663bdf4d1e8ea_6d64d36bce" tabindex="-1" value=""></div>
+                            <div class="clear"><input type="submit" value="Đăng ký" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+                        </div>
+                    </form>
+                </div>
+                <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
+                <script type='text/javascript'>(function ($) { window.fnames = new Array(); window.ftypes = new Array(); fnames[0] = 'EMAIL'; ftypes[0] = 'email'; fnames[1] = 'FNAME'; ftypes[1] = 'text'; fnames[2] = 'LNAME'; ftypes[2] = 'text'; fnames[3] = 'ADDRESS'; ftypes[3] = 'address'; fnames[4] = 'PHONE'; ftypes[4] = 'phone'; fnames[5] = 'BIRTHDAY'; ftypes[5] = 'birthday'; }(jQuery)); var $mcj = jQuery.noConflict(true);</script>
+                <!--End mc_embed_signup-->
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+        <!-- top footer -->
+        <div class="section">
+            <!-- container -->
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <div class="col-md-4 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Infomation</h3>
+                            <p>ASP.NET CORE 2.0</p>
+                            <ul class="footer-links">
+                                <li><a href="#"><i class="fa fa-map-marker"></i>HCMUP-AnDuongVuong-HCM City</a></li>
+                                <li><a href="#"><i class="fa fa-phone"></i>0903-373-103</a></li>
+                                <li><a href="#"><i class="fa fa-envelope-o"></i>damnhatphong671998@gmail.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Categories</h3>
+                            <ul class="footer-links">
+                                <li><i class="fa fa-laptop"></i><a href="#">Laptops</a></li>
+                                <li><i class="fa fa-phone"></i><a href="#">Smartphones</a></li>
+                                <li><i class="fa fa-camera"></i><a href="#">Cameras</a></li>
+                                <li><i class="fa fa-headphones"></i><a href="#">Accessories</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="clearfix visible-xs"></div>
+
+                    <div class="col-md-4 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">About Me</h3>
+                            <ul class="footer-links">
+                                <li><i class="fa fa-facebook"></i><a href="https://www.facebook.com/phong.nhat.31">FaceBook</a></li>
+                                <li><i class="fa fa-envelope-o"></i><a href="#">Gmail</a></li>
+                                <li><i class="fa fa-github"></i><a href="https://github.com/damnhatphong">GitHub</a></li>
+                                <li><i class="fa fa-youtube"></i><a href="#">YouTube</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /top footer -->
+        <!-- bottom footer -->
+        <div id="bottom-footer" class="section">
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <span class="copyright">
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;
+                            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </span>
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /bottom footer -->
+    </footer>
+    <!-- /FOOTER -->
+    <!--Custom Javascript code-->
+    <!-- jQuery Plugins -->
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/slick.min.js"></script>
+    <script src="~/js/nouislider.min.js"></script>
+    <script src="~/js/jquery.zoom.min.js"></script>
+    <script src="~/js/main.js"></script>
+    @*<div id="fb-root"></div>
+        <script>
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2';
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>*@
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/5d5ed652eb1a6b0be608e0b9/default';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+    <script async src="https://platform-api.sharethis.com/js/sharethis.js#property=5deac1c08c7ab700128e4856&product=sticky-share-buttons"></script>
+</body>
+</html>

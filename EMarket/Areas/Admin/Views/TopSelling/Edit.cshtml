@@ -1,0 +1,41 @@
+﻿@model EMarket.Areas.Admin.Models.TopSelling
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>TopSelling</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TopSellingId" />
+            <div class="form-group">
+                <label asp-for="HangHoaId" class="control-label"></label>
+                <select asp-for="HangHoaId" class="form-control" asp-items="ViewBag.HangHoaId"></select>
+                <span asp-validation-for="HangHoaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SoLan" class="control-label"></label>
+                <input asp-for="SoLan" class="form-control" />
+                <span asp-validation-for="SoLan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DanhGia" class="control-label"></label>
+                <input asp-for="DanhGia" class="form-control" />
+                <span asp-validation-for="DanhGia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

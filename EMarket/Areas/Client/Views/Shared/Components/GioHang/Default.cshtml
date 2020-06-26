@@ -1,0 +1,52 @@
+﻿@model GioHangViewModel
+@using Newtonsoft.Json;
+@{
+    Layout = null;
+}
+@{
+    double total = 0;
+    int quantity = 0;
+}
+<div class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+        <i class="fa fa-shopping-cart"></i>
+        <span>Giỏ Hàng</span>
+        <div class="qty">@Model.GioHang.Count()</div>
+    </a>
+
+    <div class="cart-dropdown">
+        @if (Model.GioHang.Any())
+        {
+            <div class="cart-list">
+
+                @foreach (var item in Model.GioHang)
+                {
+                    <div class="product-widget">
+                        <div class="product-img">
+                            <img src="~/img/@item.HangHoa.Hinh" alt="">
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-name"><a asp-controller="HangHoa">@item.HangHoa.TenHangHoa</a></h3>
+                            <h4 class="product-price"><span class="qty">@(item.SoLuong)x</span>@item.HangHoa.Gia$</h4>
+                        </div>
+                        <a asp-controller="GioHang" asp-action="Xoa" asp-route-id="@item.HangHoa.HangHoaId" class="delete"><i class="fa fa-close"></i></a>
+                    </div>
+                    total += item.HangHoa.Gia * item.SoLuong;
+                    quantity += item.SoLuong;
+                }
+            </div>
+        }
+        <div class="cart-summary">
+            <small>@quantity sản phẩm đã chọn</small>
+            <h5>Tổng Tiền: @total</h5>
+        </div>
+        <div class="cart-btns">
+            <form asp-controller="CheckOut" asp-action="Index">
+                <input type="hidden" name="danhsach" value="@JsonConvert.SerializeObject(Model.GioHang)" />
+                <button style="width:100%;color:white;background-color:black; padding-top:10px;padding-bottom:10px;" type="submit" href="#" id="submit">Đặt Hàng<i class="fa fa-arrow-circle-right"></i></button>
+            </form>
+
+</div>
+    </div>
+</div>
+

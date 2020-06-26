@@ -1,0 +1,87 @@
+﻿@using Newtonsoft.Json;
+@model GioHangViewModel
+@{
+    ViewData["Title"] = "Index";
+    double total = 0;
+}
+
+<div class="col-md-9">
+    <div class="section">
+        
+        <form asp-controller="GioHang" asp-action="ThanhToan">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <!-- Billing Details -->
+                    <div class="billing-details">
+                        <div class="section-title">
+                            <h3 class="title">THÔNG TIN ĐƠN HÀNG</h3>
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="text" name="name" placeholder="Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="email" name="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="text" name="address" placeholder="Address" required>
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="tel" name="tel" placeholder="Telephone" required>
+                        </div>
+
+                    </div>
+                    <!-- /Billing Details -->
+                </div>
+
+                <!-- Order Details -->
+
+                <div class="col-md-6 pull-right order-details">
+                    <div class="section-title text-center">
+                        <h3 class="title">Your Order</h3>
+                    </div>
+                    <div class="order-summary">
+                        <div class="order-col">
+                            <div><strong>PRODUCT</strong></div>
+                            <div><strong>TOTAL</strong></div>
+                        </div>
+                        <div class="order-products">
+
+                            @foreach (var item in Model.GioHang)
+                            {
+                                <div class="order-col">
+                                    <div>@item.SoLuong x @item.HangHoa.TenHangHoa</div>
+                                    <div>$@item.HangHoa.Gia </div>
+                                </div>
+                                total += item.HangHoa.Gia * item.SoLuong;
+                            }
+                        </div>
+                        <div class="order-col">
+                            <div><strong>TOTAL</strong></div>
+                            <div><strong class="order-total">$@total</strong></div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="danhsach" value="@JsonConvert.SerializeObject(Model.GioHang)" />
+                    <button type="submit" class="primary-btn order-submit">Xác Nhận</button>
+                    <br />
+                </div>
+                <!-- /Order Details -->
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="text-right">Thanh toán trực tuyến PayPal</h4>
+                <form asp-controller="GioHang" asp-action="PaypalPayment" class="text-right">
+                    <button type="submit" style="background: none; padding:0;"><img src="~/images./checkout-logo-large.png" /></button>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <a asp-controller="GioHang" asp-action="OnePayPayment" asp-route-amount="total" class="h4">Thanh toán trực tuyến OnePay</a>
+            </div>
+            
+        </div>
+        
+            
+    </div>
+</div>

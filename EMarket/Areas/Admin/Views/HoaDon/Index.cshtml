@@ -1,0 +1,61 @@
+﻿@model IEnumerable<EMarket.Areas.Admin.Models.HoaDon>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>DANH SÁCH HÓA ĐƠN</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayLapHoaDon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TinhTrang)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenKhachHang)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiaChi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sdt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayLapHoaDon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TinhTrang)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenKhachHang)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiaChi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sdt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                <a class="btn btn-warning" asp-action="Check" asp-route-id="@item.HoaDonId"><i class="fas fa-check"></i></a>
+                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.HoaDonId"><i class="fas fa-info"></i></a> 
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.HoaDonId"><i class="fas fa-trash-alt"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

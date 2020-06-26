@@ -1,0 +1,187 @@
+﻿@model EMarket.Areas.Admin.Models.HangHoa
+
+@{
+    ViewData["Title"] = "Details";
+    var khohang = ViewBag.Checkavailable;
+    var hethang = "(hết)";
+}
+    <title>@Model.TenHangHoa</title>
+<meta property="og:url" content="http://ecom-hcmue.tk/" />
+<meta property="og:type" content="@Model.Loai" />
+<meta property="og:title" content="@Model.TenHangHoa" />
+<meta property="og:description" content="@Model.MoTa" />
+<meta property="og:image" content="~/img/@Model.Hinh" />
+<script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v4.0&appId=1912967308968186&autoLogAppEvents=1"></script>
+
+
+<div class="col-md-9">
+    <h3 style="color:red; width:100%;text-align:center;"> @TempData["loginError"]</h3>
+</div>
+<div class="col-md-9">
+    <!-- Product main img -->
+    <div class="col-md-4">
+
+        <img src="~/img/@Model.Hinh" alt="" width="200" height="auto">
+
+    </div>
+    <!-- /Product main img -->
+    <!-- Product details -->
+    <div class="col-md-8">
+        <div class="product-details">
+            <h2 class="product-name">
+                @Model.TenHangHoa @if (!khohang.Contains(Model.HangHoaId))
+                {@hethang}
+            </h2>
+            <div>
+                <div class="product-rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-o"></i>
+                </div>
+
+            </div>
+            <div>
+                <h3 class="product-price">@Model.Gia$</h3>
+            </div>
+            <p>@Model.MoTa</p>
+
+            <div class="add-to-cart">
+                <form asp-controller="GioHang" asp-action="Them">
+                    <div class="qty-label">
+                        Qty
+                        <div class="input-number">
+                            <input name="soLuong" type="number" required>
+                            <input type="hidden" name="id" value="@Model.HangHoaId" />
+                            <span class="qty-up">+</span>
+                            <span class="qty-down">-</span>
+                        </div>
+                    </div>
+                    @if (khohang.Contains(Model.HangHoaId))
+                    {
+                        <button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn add-to-cart-btn" disabled><i class="fa fa-shopping-cart"></i> add to cart</button>
+                    }
+                </form>
+            </div>
+
+            <ul class="product-links">
+                <li>Category:</li>
+                <li><a href="#">@Model.Loai.TenLoai</a></li>
+            </ul>
+            @{
+                string link = "http://ecom-hcmue.tk/";
+                link += "HangHoa/" + @Model.TenLoaiSeoUrl + "/" + @Model.TenHhSeoUrl + "?id=" + @Model.HangHoaId;
+            }
+            <div class="fb-share-button"
+                 data-href="@link"
+                 data-layout="button_count">
+            </div>
+
+
+        </div>
+    </div>
+    <!-- /Product details -->
+</div>
+
+<div class="col-md-9">
+    <!-- Product tab -->
+    <div class="col-md-12">
+        <div id="product-tab">
+            <!-- product tab nav -->
+            <ul class="tab-nav">
+                <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+                <li><a data-toggle="tab" href="#tab2">Details</a></li>
+                <li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li>
+            </ul>
+            <!-- /product tab nav -->
+            <!-- product tab content -->
+            <div class="tab-content">
+                <!-- tab1  -->
+                <div id="tab1" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>@Model.MoTa</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /tab1  -->
+                <!-- tab2  -->
+                <div id="tab2" class="tab-pane fade in">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>@Model.MoTa</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /tab2  -->
+                <!-- tab3  -->
+                <div id="tab3" class="tab-pane fade in">
+                    <div class="row">
+                        <!-- Rating -->
+                        <div class="col-md-3">
+                            <div id="rating">
+                                <div class="rating-avg">
+                                    <span>4.5</span>
+                                    <div class="rating-stars">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Rating -->
+                        <!-- Reviews -->
+                        <!-- /Reviews -->
+                        <!-- Review Form -->
+                        <div class="col-md-3">
+                            <div id="review-form">
+                                <form asp-controller="Rating" asp-action="AddNewRating" class="review-form">
+                                    <textarea name="comment" style="width:600px;height:100px; resize:none;" class="input" placeholder="Your Review"></textarea>
+                                    <div class="input-rating">
+                                        <span>Your Rating: </span>
+                                        <div class="stars">
+                                            <input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
+                                            <input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
+                                            <input id="star3" name="rating" value="3" type="radio"><label for="star3"></label>
+                                            <input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
+                                            <input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
+                                        </div>
+                                        <input type="hidden" name="id" value="@Model.HangHoaId" />
+                                    </div>
+                                    <button type="submit" class="primary-btn">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /Review Form -->
+                    </div>
+                </div>
+                <!-- /tab3  -->
+            </div>
+            <!-- /product tab content  -->
+        </div>
+    </div>
+    <!-- /product tab -->
+</div>
+
+<div class="col-md-9">
+    <div class="fb-comments" data-href="https://localhost:44338" data-width="700" data-numposts="5"></div>
+    <div class="fb-like" data-href="https://www.facebook.com/vnshoestore" data-width="400" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+    <div class="fb-share-button" data-href="https://www.facebook.com/vnshoestore" data-layout="button_count" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2Fvnshoestore&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+</div>

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<EMarket.Areas.Admin.Models.ThongTinTaiKhoan>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Thông tin tài khoản</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TaiKhoan.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HoVaTen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgaySinh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sdt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiaChi)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaiKhoan.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HoVaTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgaySinh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sdt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaChi)
+                </td>
+                <td>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.ThongTinTaiKhoanId"><i class="fas fa-edit"></i></a> |
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.ThongTinTaiKhoanId"><i class="fas fa-info"></i></a> |
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ThongTinTaiKhoanId"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<a class="btn btn-success float-right" asp-action="Create"><i class="fas fa-plus-square"></i></a>

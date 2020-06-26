@@ -1,0 +1,49 @@
+﻿@model EMarket.Areas.Admin.Models.ThongTinTaiKhoan
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h3>Hãy xác nhận lại thông tin muốn hủy</h3>
+<div>
+    <h4>Thông tin tài khoản</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.HoVaTen)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HoVaTen)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NgaySinh)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NgaySinh)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Sdt)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Sdt)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaChi)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DiaChi)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TaiKhoan)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TaiKhoan.Password)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ThongTinTaiKhoanId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

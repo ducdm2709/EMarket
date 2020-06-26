@@ -1,0 +1,109 @@
+﻿@model PaginatedList<EMarket.Areas.Admin.Models.HangHoa>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>HÀNG HÓA</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="card-header">Danh Sách Hàng Hóa</h5>
+                </div>
+                <div class="col-md-6">
+                    <form asp-controller="HangHoa" asp-action="Index" method="get" class="top-search-bar form-inline float-right">
+                        <input class="form-control" name="searchstring" type="text" placeholder="Tìm Kiếm.." autocomplete="off">     
+                        <input style="margin-left:10px;" class="form-control" type="submit" value="Filter" />
+                    </form>
+                </div>
+            </div>
+            <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    @Html.DisplayNameFor(model => model[0].TenHangHoa)
+                                </th>
+                                <th scope="col">
+                                    @Html.DisplayNameFor(model => model[0].Gia)
+                                </th>
+                                <th scope="col" style="text-align:center">
+                                    @Html.DisplayNameFor(model => model[0].Hinh)
+                                </th>
+                                <th scope="col">
+                                    @Html.DisplayNameFor(model => model[0].MoTa)
+                                </th>
+                                <th scope="col">
+                                    @Html.DisplayNameFor(model => model[0].Loai)
+                                </th>
+                                <th scope="col">
+                                    @Html.DisplayNameFor(model => model[0].NhaCungCap)
+                                </th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TenHangHoa)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Gia)
+                                    </td>
+                                    <td>
+                                        <img height="auto" width="150" src="~/img/@Html.DisplayFor(modelItem => item.Hinh)" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.MoTa)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Loai.TenLoai)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NhaCungCap.TenNhaCungCap)
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.HangHoaId"><i class="fas fa-edit"></i></a>
+                                        <br />
+                                        <br />
+                                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.HangHoaId"><i class="fas fa-info"></i></a>
+                                        <br />
+                                        <br />
+                                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.HangHoaId"><i class="fas fa-trash-alt"></i></a>
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</div>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<a asp-action="Index"
+   asp-route-page="@(Model.PageIndex - 1)"
+    asp-route-searchString="@ViewData["SearchString"]"
+    asp-route-LoaiId="@ViewData["LoaiId"]"
+   class="btn btn-dark @prevDisabled">
+    Trước
+</a>
+<a asp-action="Index"
+   asp-route-page="@(Model.PageIndex + 1)"
+    asp-route-searchString="@ViewData["SearchString"]"
+    asp-route-LoaiId="@ViewData["LoaiId"]"
+   class="btn btn-dark @nextDisabled">
+   Sau
+</a>
+
+<a class="btn btn-success float-right" asp-action="Create"><i class="fas fa-plus-square"></i></a>

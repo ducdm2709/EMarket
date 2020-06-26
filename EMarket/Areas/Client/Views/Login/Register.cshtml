@@ -1,0 +1,82 @@
+﻿@model EMarket.Areas.Admin.Models.TaiKhoan
+@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Concept - Bootstrap 4 Admin Dashboard Template</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="~/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/assets/libs/css/style.css">
+    <link rel="stylesheet" href="~/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <style>
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+    </style>
+</head>
+<!-- ============================================================== -->
+<!-- signup form  -->
+<!-- ============================================================== -->
+<body>
+    <!-- ============================================================== -->
+    <!-- signup form  -->
+    <!-- ============================================================== -->
+    <form class="splash-container" asp-action="Register">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-1">Đăng Ký</h3>
+                <p>Xin Vui Lòng Nhập Dữ Liệu:</p>
+            </div>            
+            <div class="card-body">
+                <h5 class="text-danger">@ViewData["RegisterError"]</h5>
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input class="form-control form-control-lg" type="text" asp-for="UserName" placeholder="Username" autocomplete="off">
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input class="form-control form-control-lg" type="text" asp-for="Email" placeholder="E-mail" autocomplete="off">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input class="form-control form-control-lg" type="text" asp-for="Password" placeholder="Password" autocomplete="off">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input class="form-control form-control-lg" name="repassword" required="" placeholder="Confirm-Password" autocomplete="off">
+                </div>
+                <div class="form-group pt-2">
+                    <input class="btn btn-block btn-primary" type="submit" value="Đăng Ký">
+                </div>
+
+
+            </div>
+            <div class="card-footer bg-white">
+                <p>Đã có tài khoản? <a asp-controller="Login" asp-action="Index" class="text-secondary">Đăng nhập tại đây.</a></p>
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>

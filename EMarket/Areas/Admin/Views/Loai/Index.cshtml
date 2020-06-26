@@ -1,0 +1,53 @@
+﻿@model IEnumerable<EMarket.Areas.Admin.Models.Loai>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Thể Loại</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-header">Danh Sách Loại</h5>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                @Html.DisplayNameFor(model => model.TenLoai)
+                            </th>
+                            <th scope="col">
+                                @Html.DisplayNameFor(model => model.MoTa)
+                            </th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TenLoai)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MoTa)
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.LoaiId"><i class="fas fa-edit"></i></a>
+                                    <br />
+                                    <br />
+                                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.LoaiId"><i class="fas fa-info"></i></a>
+                                    <br />
+                                    <br />
+                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.LoaiId"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<a class="btn btn-success float-right" asp-action="Create"><i class="fas fa-plus-square"></i></a>

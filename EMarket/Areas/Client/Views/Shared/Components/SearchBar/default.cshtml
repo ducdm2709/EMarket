@@ -1,0 +1,19 @@
+﻿@model IEnumerable<EMarket.Areas.Admin.Models.Loai>
+@{
+    Layout = null;
+}
+<div class="col-md-6">
+    <div class="header-search">
+        <form asp-controller="HangHoa" asp-action="index">
+            <select name="loai" class="input-select">
+                <option value="">Tất Cả</option>
+                @foreach (var item in Model)
+                {
+                    <option value="@item.LoaiId">@item.TenLoai</option>
+                }
+            </select>
+            <input name="pattern" class="input" placeholder="Nhập Tên Vào Đây...">
+            <button type ="submit" class="search-btn">Search</button>
+        </form>
+    </div>
+</div>

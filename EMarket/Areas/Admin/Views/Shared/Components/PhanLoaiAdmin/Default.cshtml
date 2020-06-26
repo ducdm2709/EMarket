@@ -1,0 +1,12 @@
+﻿@model IEnumerable<EMarket.Areas.Admin.Models.Loai>
+@{
+    Layout = null;
+}
+
+
+@foreach (var item in Model) {
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="HangHoa" asp-action="Index" asp-route-LoaiId="@item.LoaiId">@item.TenLoai</a>
+    </li>
+}
+

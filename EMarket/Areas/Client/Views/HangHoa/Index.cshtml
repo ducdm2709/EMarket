@@ -1,0 +1,78 @@
+﻿@model PaginatedList<EMarket.Areas.Admin.Models.HangHoa>
+
+@{
+    ViewData["Title"] = "Index";
+    var khohang = ViewBag.Checkavailable;
+}
+
+<div class="col-md-9">
+    <h3 style="color:red; width:100%;text-align:center;">@TempData["status"]</h3>
+</div>
+<div id="store" class="col-md-9">
+    <div class="col-md-12">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+
+                <div class="col-md-4">
+                    <div class="product">
+                        <div class="product-img">
+                            <img src="~/img/@item.Hinh" alt="" height="262" width="262">
+                            <div class="product-label">
+                                <span class="new">@item.NhaCungCap.TenNhaCungCap</span>
+                                @if (!khohang.Contains(item.HangHoaId)) {
+                                <span class="sale">hết</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="product-body">
+                            <p class="product-category">@item.Loai.TenLoai</p>
+                            <h3 class="product-name"><a asp-action="Details" asp-route-id="@item.HangHoaId" asp-route-loai="@item.TenLoaiSeoUrl" asp-route-url="@item.TenHhSeoUrl">@item.TenHangHoa</a></h3>
+                            <h4 class="product-price">@item.Gia$</h4>
+                            <div class="product-rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            @if (khohang.Contains(item.HangHoaId))
+                            {
+                                <a asp-controller="GioHang" asp-action="Them" asp-route-id="@item.HangHoaId" asp-route-soLuong="1" class="btn add-to-cart-btn" style="padding-top:8px;"><i class="fa fa-shopping-cart"></i> add to cart</a>
+                            }
+                            else
+                            {
+                                <button disabled class="btn add-to-cart-btn" style="padding-top:8px;"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+    <div class="col-md-12">
+        @{
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        }
+        <a asp-action="Index"
+           asp-route-page="@(Model.PageIndex - 1)"
+           asp-route-loai="@ViewData["LoaiID"]"
+           asp-route-nhacc="@ViewData["NhaCungCapID"]"
+           asp-route-pattern="@ViewData["pattern"]"
+           class="btn btn-default @prevDisabled">
+            Previous
+        </a>
+        <a asp-action="Index"
+           asp-route-page="@(Model.PageIndex + 1)"
+           asp-route-loai="@ViewData["LoaiID"]"
+           asp-route-nhacc="@ViewData["NhaCungCapID"]"
+           asp-route-pattern="@ViewData["pattern"]"
+           class="btn btn-default @nextDisabled">
+            Next
+        </a>
+    </div>
+</div>
