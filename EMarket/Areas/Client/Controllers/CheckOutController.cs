@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using EMarket.Areas.Admin.Models;
 using EMarket.Areas.Client.Models;
-using EMarket.Services.PayPal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -15,12 +14,10 @@ namespace EMarket.Areas.Client.Controllers
     public class CheckOutController : Controller
     {
         private readonly EMarketContext _context;
-        private readonly PayPalAuthOptions _payPalOption;
 
-        public CheckOutController(EMarketContext context, IOptions<PayPalAuthOptions> payPal)
+        public CheckOutController(EMarketContext context)
         {
             _context = context;
-            _payPalOption = payPal.Value;
         }
 
         public IActionResult Index(string danhsach)
@@ -42,8 +39,6 @@ namespace EMarket.Areas.Client.Controllers
                 return RedirectToAction("Index", "HangHoa");
             }
             GioHangViewModel list = new GioHangViewModel { GioHang = danhsachhang };
-            ViewData["ClientId"] = _payPalOption.PayPalClientID ?? "";
-            ViewBag.ClientId = _payPalOption.PayPalClientID;
             return View(list);
         }
         

@@ -9,9 +9,7 @@ using EMarket.Areas.Client.Helpers;
 using EMarket.Areas.Client.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using EMarket.Services.PayPal;
 using PayPal.v1.Payments;
-using EMarket.Services.OnePay;
 
 namespace EMarket.Areas.Client.Controllers
 {
@@ -20,14 +18,12 @@ namespace EMarket.Areas.Client.Controllers
     {
         private readonly EMarketContext eMarketContext;
         private readonly ILogger<GioHangController> _logger;
-        private readonly IPayPalPayment _payPal;
         private IHttpContextAccessor _accessor;
 
-        public GioHangController(EMarketContext context, ILogger<GioHangController> logger,IPayPalPayment payPal, IHttpContextAccessor accessor)
+        public GioHangController(EMarketContext context, ILogger<GioHangController> logger, IHttpContextAccessor accessor)
         {
             eMarketContext = context;
             _logger = logger;
-            _payPal = payPal;
             _accessor = accessor;
         }
 
@@ -147,130 +143,6 @@ namespace EMarket.Areas.Client.Controllers
                 eMarketContext.SaveChanges();
             }
             return hoadon;
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> PaypalPayment()
-        {
-            List<GioHang> danhsachhang = SessionHelper.GetObjectFromJson<List<GioHang>>(HttpContext.Session, "cart");
-            List<Item> items = new List<Item>();
-            double total = 0;
-
-            foreach (var x in danhsachhang)
-            {   
-                items.Add(new Item() {
-                    Name = x.HangHoa.TenHangHoa,
-                    Currency = "USD",
-                    Price = x.HangHoa.Gia.ToString(),
-                    Quantity = x.SoLuong.ToString(),
-                    Sku = "sku",
-                    Tax = "0"
-                });
-                total += x.HangHoa.Gia * x.SoLuong;
-            }
-
-            Payment payment = _payPal.CreatePayment(total, @"https://localhost:44336/Client/GioHang/Success", @"https://localhost:44336/Client/GioHang/Fail", "sale",items);
-            string paypalRedirectUrl = await _payPal.ExecutePayment(payment);
-            if (paypalRedirectUrl == "fail") {
-                return RedirectToAction("Fail");
-            }
-            return Redirect(paypalRedirectUrl);
-        }
-
-        public IActionResult OnePayPayment(string amount)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult OnePayPayment([Bind("vpc_Customer_Phone,vpc_Customer_Email,vpc_Customer_Id,vpc_Customer_Name")] VPC vpc)
-        {
-            string value = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "User");
-            var user = eMarketContext.TaiKhoan.Include(p => p.ThongTinTaiKhoan).Where(p => p.UserName == value).FirstOrDefault();
-
-            List<GioHang> danhsachhang = SessionHelper.GetObjectFromJson<List<GioHang>>(HttpContext.Session, "cart");
-            double total = 0;
-            
-            foreach (var x in danhsachhang)
-            {
-                total += x.HangHoa.Gia * x.SoLuong;
-            }
-            total = VPCRequest.USD_VND * total;
-            var current_invoice = CreateInvoice(danhsachhang, vpc.vpc_Customer_Name, vpc.vpc_Customer_Email, vpc.vpc_Customer_Address, vpc.vpc_Customer_Phone);
-
-            HttpContext.Session.SetString("cart", "");
-
-            foreach (var item in danhsachhang)
-            {
-                var topselling = eMarketContext.TopSelling.Where(p => p.HangHoaId == item.HangHoa.HangHoaId).FirstOrDefault();
-                if (topselling == null)
-                {
-                    var newcolumn = new TopSelling();
-                    newcolumn.HangHoaId = item.HangHoa.HangHoaId;
-                    newcolumn.SoLan = 1;
-                    eMarketContext.Add(newcolumn);
-                    eMarketContext.SaveChanges();
-                }
-                else
-                {
-                    topselling.SoLan += 1;
-                    eMarketContext.Update(topselling);
-                    eMarketContext.SaveChanges();
-                }
-            }
-
-            //Send request to OnePay
-            string returnURL = Url.Action("OnePayResult", "GioHang",null, Request.Scheme); ;
-            VPCRequest conn = new VPCRequest();
-            conn.SetSecureSecret(VPCRequest.SECURE_SECRET);
-            conn.AddDigitalOrderField("Title", "onepay paygate");
-            conn.AddDigitalOrderField("vpc_Locale", "vn");//Chon ngon ngu hien thi tren cong thanh toan (vn/en)
-            conn.AddDigitalOrderField("vpc_Version", "2");
-            conn.AddDigitalOrderField("vpc_Command", "pay");
-            conn.AddDigitalOrderField("vpc_Merchant", VPCRequest.MERCHANT_ID);
-            conn.AddDigitalOrderField("vpc_AccessCode", VPCRequest.ACCESS_CODE);
-            conn.AddDigitalOrderField("vpc_MerchTxnRef", "HoaDon_"+ current_invoice.HoaDonId);
-            conn.AddDigitalOrderField("vpc_OrderInfo", "HoaDon_" + current_invoice.HoaDonId);
-            conn.AddDigitalOrderField("vpc_Amount", total+"00");
-            conn.AddDigitalOrderField("vpc_Currency", "VND");
-            conn.AddDigitalOrderField("vpc_ReturnURL", returnURL);
-
-            // Thong tin them ve khach hang. De trong neu khong co thong tin
-            conn.AddDigitalOrderField("vpc_Customer_Phone", vpc.vpc_Customer_Phone);
-            conn.AddDigitalOrderField("vpc_Customer_Email", vpc.vpc_Customer_Email);
-            conn.AddDigitalOrderField("vpc_Customer_Id", ""+user.TaiKhoanId);
-
-            // Dia chi IP cua khach hang
-            string ipAddress = _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
-            conn.AddDigitalOrderField("vpc_TicketNo", ipAddress);
-
-            // Chuyen huong trinh duyet sang cong thanh toan
-            string url = conn.Create3PartyQueryString();
-            return Redirect(url);
-        }
-        
-        public IActionResult OnePayResult(string vpc_TxnResponseCode)
-        {
-            VPCRequest conn = new VPCRequest("http://onepay.vn");
-            conn.SetSecureSecret(VPCRequest.SECURE_SECRET);
-            // Xu ly tham so tra ve va kiem tra chuoi du lieu ma hoa
-            var hashvalidateResult = conn.Process3PartyResponse(HttpContext.Request.Query);
-            string result = "";
-            if (hashvalidateResult == "CORRECTED" && vpc_TxnResponseCode.Trim() == "0")
-            {
-                result = "Giao dịch thành công";
-            }
-            else if (hashvalidateResult == "INVALIDATED" && vpc_TxnResponseCode.Trim() == "0")
-            {
-                result = "Giao dịch đang chờ xử lý";
-            }
-            else
-            {
-                result = "Giao dịch không thành công";
-            }
-            ViewBag.Result = result;
-            return View();
         }
 
         public IActionResult Success()

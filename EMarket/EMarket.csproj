@@ -5,17 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Services\Implement\**" />
-    <Compile Remove="Services\Interface\**" />
-    <Content Remove="Services\Implement\**" />
-    <Content Remove="Services\Interface\**" />
-    <EmbeddedResource Remove="Services\Implement\**" />
-    <EmbeddedResource Remove="Services\Interface\**" />
-    <None Remove="Services\Implement\**" />
-    <None Remove="Services\Interface\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="KendoUICore" Version="2019.1.220" />
     <PackageReference Include="MailChimp.Net.V3" Version="4.2.0" />
     <PackageReference Include="MailKit" Version="2.1.1" />

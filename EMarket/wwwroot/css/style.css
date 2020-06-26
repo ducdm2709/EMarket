@@ -1992,7 +1992,12 @@ textarea.input {
 .header-logo .logo-text {
     font-size: 25px;
     color: white;
-    margin-left: 20px;
+    margin-left: 10px;
+}
+
+.header-logo i {
+    font-size: 25px;
+    color: white;
 }
 
 /*=========================================================

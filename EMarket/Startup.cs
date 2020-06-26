@@ -8,10 +8,8 @@ using EMarket.Areas.Admin.Models;
 using Microsoft.EntityFrameworkCore;
 using EMarket.Areas.Admin.Filters;
 using EMarket.Areas.Client.Services;
-using EMarket.Services.PayPal;
 using Microsoft.Extensions.Logging;
 using EMarket.Middlewares;
-using EMarket.Services.MailChimp;
 
 namespace EMarket
 {
@@ -47,16 +45,8 @@ namespace EMarket
             services.AddScoped<HelperService>();
             _logger.LogInformation("Added Helper to startup services");
 
-            services.AddSingleton<IPayPalPayment, PayPalPayment>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.Configure<PayPalAuthOptions>(Configuration.GetSection("PayPalPayment"));
-            _logger.LogInformation("Added PayPalAuthorization Options. This can be retrieved via configuration.");
-
-
-            services.Configure<MailchimpOptions>(Configuration.GetSection("Mailchimp"));
-            _logger.LogInformation("Added Mailchimp Options. This can be retrieved via configuration.");
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
