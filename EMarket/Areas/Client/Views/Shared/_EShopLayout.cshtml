@@ -56,44 +56,14 @@
         gtag('config', 'UA-146394729-1');
     </script>
 </head>
-<body>
-    <!-- Load Facebook SDK for JavaScript -->
-    <div id="fb-root"></div>
-    <script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                xfbml: true,
-                version: 'v4.0'
-            });
-        };
-
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
-
-    <!-- Your customer chat code -->
-    <div class="fb-customerchat"
-         attribution=setup_tool
-         page_id="115306342469879"
-         logged_in_greeting="Xin Chào! Bạn cần chúng tôi giúp gì?"
-         logged_out_greeting="Xin Chào! Bạn cần chúng tôi giúp gì?">
-    </div>
-
+<body> 
 
     <!-- HEADER -->
     <header>
         <!-- TOP HEADER -->
         <div id="top-header">
             <div class="container">
-                <ul class="header-links pull-left">
-                    <li><a href="#"><i class="fa fa-phone"></i> 0903-373-103</a></li>
-                    <li><a href="#"><i class="fa fa-envelope-o"></i> EShopping@gmail.com</a></li>
-                    <li><a href="#"><i class="fa fa-map-marker"></i> HCMUP-HCM CiTy</a></li>
-                </ul>
+         
                 <ul class="header-links pull-right">
                     @if (Context.Session.GetString("User") == null || Context.Session.GetString("User") == "")
                     {
@@ -120,7 +90,7 @@
                     <div class="col-md-3">
                         <div class="header-logo">
                             <a class="logo mt-5" asp-controller="GioHang" asp-action="Index">
-                                <span>Trang Chủ</span>
+                                <span class="logo-text">Trang Chủ</span>
                             </a>
                         </div>
                     </div>
@@ -342,29 +312,6 @@
     <script src="~/js/nouislider.min.js"></script>
     <script src="~/js/jquery.zoom.min.js"></script>
     <script src="~/js/main.js"></script>
-    @*<div id="fb-root"></div>
-        <script>
-            (function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2';
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-        </script>*@
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-        (function () {
-            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/5d5ed652eb1a6b0be608e0b9/default';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-        })();
-    </script>
-    <!--End of Tawk.to Script-->
-    <script async src="https://platform-api.sharethis.com/js/sharethis.js#property=5deac1c08c7ab700128e4856&product=sticky-share-buttons"></script>
+
 </body>
 </html>
